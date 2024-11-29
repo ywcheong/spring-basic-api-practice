@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController("/documented")
 public class DocumentedController {
+
+    private final Logger logger = LoggerFactory.getLogger(DocumentedController.class);
 
     @PostMapping("/member-echo")
     @Operation(summary = "Member를 받아서 그대로 돌려줌")
@@ -29,7 +33,9 @@ public class DocumentedController {
     public ResponseEntity<MemberDto> memberEcho(
             @Parameter(description = "Member 객체") MemberDto memberDto
     ) {
+        logger.info("Received member {}", memberDto);
         if (memberDto.getName() == null && memberDto.getEmail() == null && memberDto.getOrganization() == null) {
+            logger.warn("Received member {} is empty", memberDto);
             return ResponseEntity.status(HttpStatusCode.valueOf(204)).body(memberDto);
         }
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(memberDto);
@@ -44,6 +50,7 @@ public class DocumentedController {
                     content = @Content(mediaType = "text/html")
             ) @RequestBody String string
     ) {
+        logger.info("Received string {}", string);
         return string;
     }
 }
