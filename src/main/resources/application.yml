@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: simple-api
+
+springdoc:
+  api-docs:
+    path: /openapi
+  swagger-ui:
+    path: /openapi/webview.html
